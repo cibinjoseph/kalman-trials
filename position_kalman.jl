@@ -1,14 +1,19 @@
+## Kalman filter on a position-velocity system
+# Implements one using a vanilla kalman filter and one using KalmanFilters.jl
 using Plots
 using Random
 using LinearAlgebra
 using KalmanFilters
 
+# Seed to get reproducible results
 Random.seed!(1234)
 
+# Position state
 function get_position(t)
     return 14.4*sin(0.5*t)
 end
 
+# This is for verification at the end
 function get_velocity(t)
     return 14.4*0.5*cos.(0.5*t)
 end
@@ -35,7 +40,7 @@ zk = zeros(1, n)
 xhat_estimate = similar(xhat_pred)
 P_estimate = similar(P_pred)
 
-# Vanilla Kalman
+# Implementation using Vanilla Kalman
 # for i in 1:n
 #     # Predict state and error covariance
 #     xhat_pred .= A*xhat_prev
@@ -57,7 +62,7 @@ P_estimate = similar(P_pred)
 #     P_prev .= P_estimate
 # end
 
-# Using KalmanFilters.jl package
+# Implementation using KalmanFilters.jl package
 i = 1
 mu = measurement_update(xhat_prev, P_prev, [get_position(t[i])+noise[i]], H, R)
 for i = 1:n
@@ -67,6 +72,7 @@ for i = 1:n
     x_record[:, i] .= mu.state
 end
 
+# Plot results
 plot(t, zk', label="Measured position")
 plot!(t, x_record[1, :], label="Estimated position")
 plot!(t, x_record[2, :], label="Estimated velocity")
