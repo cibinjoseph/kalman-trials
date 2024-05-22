@@ -5,8 +5,8 @@ using Random
 Random.seed!(1234)
 
 function get_V(t)
-    # return 14.4*sin(0.5*t) + randn()
-    return 14.4 + 4*randn()
+    return 14.4*sin(0.5*t) + randn()
+    # return 14.4 + 4*randn()
 end
 
 n = 400
@@ -14,9 +14,9 @@ t = LinRange(0, 20, n)
 z = get_V.(t)
 
 # Initialize state and covariance
-xhat_prev = 14.0
-P_prev = 6.0
-Q = 0
+xhat_prev = 0.0
+P_prev = 4.0
+Q = 0.5
 A = 1
 H = 1
 R = 4
